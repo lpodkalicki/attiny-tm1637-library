@@ -5,9 +5,10 @@
  *
  * Features:
  * - display digits
+ * - display colon
  * - display raw segments
  * - display on/off
- * - brightness control  
+ * - brightness control
  *
  * References:
  * - library: https://github.com/lpodkalicki/attiny-tm1637-library
@@ -76,6 +77,7 @@ TM1637_set_brightness(const uint8_t brightness)
 void
 TM1637_show_colon(bool value)
 {
+
 	if (value) {
 		_flags |= TM1637_FLAG_SHOWCOLON;
 	} else {

@@ -5,9 +5,10 @@
  *
  * Features:
  * - display digits
+ * - display colon
  * - display raw segments
  * - display on/off
- * - brightness control  
+ * - brightness control 
  *
  * References:
  * - library: https://github.com/lpodkalicki/attiny-tm1637-library
