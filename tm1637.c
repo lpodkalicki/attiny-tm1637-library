@@ -33,7 +33,7 @@ static void TM1637_start(void);
 static void TM1637_stop(void);
 static uint8_t TM1637_write_byte(uint8_t value);
 
-static const uint8_t _digit2segment[] =
+static const uint8_t _digit2segments[] =
 {
 	0x3F, // 0
 	0x06, // 1
@@ -78,17 +78,17 @@ void
 TM1637_display_digit(const uint8_t addr, const uint8_t digit)
 {
 
-	TM1637_display_segment(addr, digit < 10 ? _digit2segment[digit] : 0x00);
+	TM1637_display_segments(addr, digit < 10 ? _digit2segments[digit] : 0x00);
 }
 
 void
-TM1637_display_segment(const uint8_t addr, const uint8_t segment)
+TM1637_display_segments(const uint8_t addr, const uint8_t segments)
 {
 
 	TM1637_cmd(TM1637_CMD_SET_DATA | TM1637_SET_DATA_F_ADDR);
 	TM1637_start();
 	TM1637_write_byte(TM1637_CMD_SET_ADDR | addr);
-	TM1637_write_byte(segment);
+	TM1637_write_byte(segments);
 	TM1637_stop();	
 	TM1637_configure();	
 }
@@ -96,10 +96,10 @@ TM1637_display_segment(const uint8_t addr, const uint8_t segment)
 void
 TM1637_clear(void)
 {	
-	TM1637_display_segment(TM1637_SET_ADR_00H, 0x00);
-	TM1637_display_segment(TM1637_SET_ADR_01H, 0x00);
-	TM1637_display_segment(TM1637_SET_ADR_02H, 0x00);
-	TM1637_display_segment(TM1637_SET_ADR_03H, 0x00);
+	TM1637_display_segments(TM1637_SET_ADR_00H, 0x00);
+	TM1637_display_segments(TM1637_SET_ADR_01H, 0x00);
+	TM1637_display_segments(TM1637_SET_ADR_02H, 0x00);
+	TM1637_display_segments(TM1637_SET_ADR_03H, 0x00);
 }
 
 void

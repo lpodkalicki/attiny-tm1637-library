@@ -52,12 +52,48 @@
 #define	TM1637_SET_DISPLAY_ON		0x08 // on
 
 /**
- * Initialize TM1637 display driver. 
+ * Initialize TM1637 display driver.
+ * Clock pin (TM1637_CLK_PIN) and data pin (TM1637_DIO_PIN) 
+ * are defined at the top of this file.
  */
 void TM1637_init(void);
+
+/**
+ * Set display brightness.
+ * Min brightness: 0
+ * Max brightness: 7
+ */
 void TM1637_set_brightness(const uint8_t brightness);
-void TM1637_display_segment(const uint8_t addr, const uint8_t segment);
+
+/**
+ * Display raw segments at positions (0x00..0x03)
+ * 
+ *      bits:                 hex:
+ *        -- 0 --               -- 01 --
+ *       |       |             |        |
+ *       5       1            20        02
+ *       |       |             |        |
+ *        -- 6 --               -- 40 --
+ *       |       |             |        |
+ *       4       2            10        04
+ *       |       |             |        |
+ *        -- 3 --               -- 08 --
+ *
+ * Example segment configurations:
+ * - for character 'H', segments=0b01110110
+ * - for character '-', segments=0b01000000
+ * - etc.
+ */
+void TM1637_display_segments(const uint8_t addr, const uint8_t segments);
+
+/**
+ * Display digits ('0'..'9') at positions (0x00..0x03)
+ */
 void TM1637_display_digit(const uint8_t addr, const uint8_t digit);
+
+/**
+ * Turn display on/off.
+ */
 void TM1637_enable(const bool value);
 
 #endif	/* !_ATTINY_TM1637_H_ */
