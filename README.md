@@ -1,9 +1,9 @@
-# TM1637 AVR Library (ATtiny13, ATtiny25, ATtiny45, ATtiny85)
-This is tinyAVR library for 7-segment display modules based on TM1637 chip. The TM1637 chip also has keyboard input capability, but it's not implemented in this library.
+# TM1637 Library
+This is tinyAVR (ATtiny13, ATtiny25, ATtiny45, ATtiny85) library for 7-segment display modules based on TM1637 chip. The TM1637 chip also has keyboard input capability, but it's not implemented in this library.
 
-Modules based on TM1637 usually provide two signal connections (CLK and DIO) and two power connections (VCC and GND). Signal pins can be connected to any pair of digital pins of the AVR chip. Signal pins configuration is defined at the top of library header file, where it can be modifed.
+Modules based on TM1637 provide two signal connections (CLK and DIO) and two power connections (VCC and GND). Signal pins can be connected to any pair of digital pins of the AVR chip. Signal pins configuration is defined at the top of library header file, where it can be modifed.
 
-## Key features
+## Key Features
 This lightweight library has the following features:
 * display digits
 * display raw segments
@@ -11,10 +11,10 @@ This lightweight library has the following features:
 * display on/off
 * software I2C
 
-## Example code
+## Example Code
 This example code demonstrates basic usage of the library:
 
-```ansic
+```c
 #include <stdint.h>
 #include <avr/io.h>
 #include <util/delay.h>
@@ -41,9 +41,9 @@ main(void)
 }
 ```
 
-## API documentation (from tm1637.h)
+## API Documentation (tm1637.h)
 
-```ansic
+```c
 /**
  * Initialize TM1637 display driver.
  * Clock pin (TM1637_CLK_PIN) and data pin (TM1637_DIO_PIN)
