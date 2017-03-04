@@ -18,7 +18,6 @@ main(void)
 
 	/* setup */
 	TM1637_init();
-	TM1637_set_brightness(7);
 
 	/* loop */
 	while (1) {
@@ -26,7 +25,10 @@ main(void)
 		TM1637_display_digit(TM1637_SET_ADR_01H, (i + 1) % 0x10);
 		TM1637_display_digit(TM1637_SET_ADR_02H, (i + 2) % 0x10);
 		TM1637_display_digit(TM1637_SET_ADR_03H, (i + 3) % 0x10);
-		_delay_ms(300);
+		TM1637_show_colon(true);
+		_delay_ms(200);
+		TM1637_show_colon(false);
+		_delay_ms(200);
 		i++;
 	}
 }
