@@ -26,7 +26,6 @@
 #define	TM1637_CLK_PIN			PB1
 #define	TM1637_DELAY_US			(50)
 #define	TM1637_DEFAULT_BRIGHTNESS	(7)
-#define	TM1637_DEFAULT_ENABLED		(true)
 
 // TM1637 commands
 #define	TM1637_CMD_SET_DATA		0x40
@@ -50,6 +49,7 @@
 // TM1637 display control command set (use bitwise OR to consruct complete command)
 #define	TM1637_SET_DISPLAY_OFF		0x00 // off
 #define	TM1637_SET_DISPLAY_ON		0x08 // on
+
 
 /**
  * Initialize TM1637 display driver.
@@ -90,6 +90,16 @@ void TM1637_display_segments(const uint8_t addr, const uint8_t segments);
  * Display digits ('0'..'9') at positions (0x00..0x03)
  */
 void TM1637_display_digit(const uint8_t addr, const uint8_t digit);
+
+/**
+ * Display colon on/off.
+ */
+void TM1637_show_colon(bool value);
+
+/**
+ * Clear all display segments (including colon).
+ */
+void TM1637_clear(void);
 
 /**
  * Turn display on/off.

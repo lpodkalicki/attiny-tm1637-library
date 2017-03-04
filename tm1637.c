@@ -19,13 +19,17 @@
 #include <util/delay.h>
 #include "tm1637.h"
 
-#define TM1637_DIO_HIGH()		(PORTB |= _BV(TM1637_DIO_PIN))
-#define TM1637_DIO_LOW()		(PORTB &= ~_BV(TM1637_DIO_PIN))
-#define TM1637_DIO_OUTPUT()		(DDRB |= _BV(TM1637_DIO_PIN))
-#define TM1637_DIO_INPUT()		(DDRB &= ~_BV(TM1637_DIO_PIN))
+#define	TM1637_DIO_HIGH()		(PORTB |= _BV(TM1637_DIO_PIN))
+#define	TM1637_DIO_LOW()		(PORTB &= ~_BV(TM1637_DIO_PIN))
+#define	TM1637_DIO_OUTPUT()		(DDRB |= _BV(TM1637_DIO_PIN))
+#define	TM1637_DIO_INPUT()		(DDRB &= ~_BV(TM1637_DIO_PIN))
 #define	TM1637_DIO_READ() 		(((PINB & _BV(TM1637_DIO_PIN)) > 0) ? 1 : 0)
-#define TM1637_CLK_HIGH()		(PORTB |= _BV(TM1637_CLK_PIN))
-#define TM1637_CLK_LOW()		(PORTB &= ~_BV(TM1637_CLK_PIN))
+#define	TM1637_CLK_HIGH()		(PORTB |= _BV(TM1637_CLK_PIN))
+#define	TM1637_CLK_LOW()		(PORTB &= ~_BV(TM1637_CLK_PIN))
+
+#define	TM1637_FLAG_ENABLED		(1 << 0)
+#define	TM1637_FLAG_SHOWCOLON		(1 << 1)
+
 
 static void TM1637_configure(void);
 static void TM1637_cmd(uint8_t value);
@@ -48,7 +52,8 @@ static const uint8_t _digit2segments[] =
 };
 
 static uint8_t _brightness = TM1637_DEFAULT_BRIGHTNESS;
-static bool _enabled = TM1637_DEFAULT_ENABLED;
+static uint8_t _digit = 0xff;
+static uint8_t _flags = 0x00;
 
 void
 TM1637_init(void)
@@ -56,6 +61,8 @@ TM1637_init(void)
 
 	DDRB |= (_BV(TM1637_DIO_PIN)|_BV(TM1637_CLK_PIN));
 	PORTB &= ~(_BV(TM1637_DIO_PIN)|_BV(TM1637_CLK_PIN));
+	_flags |= TM1637_FLAG_ENABLED;
+	TM1637_clear();
 }
 
 void
@@ -67,18 +74,41 @@ TM1637_set_brightness(const uint8_t brightness)
 }
 
 void
+TM1637_show_colon(bool value)
+{
+	if (value) {
+		_flags |= TM1637_FLAG_SHOWCOLON;
+	} else {
+		_flags &= ~TM1637_FLAG_SHOWCOLON;
+	}
+	TM1637_display_digit(TM1637_SET_ADR_01H, _digit);
+}
+
+void
 TM1637_enable(bool value)
 {
 
-	_enabled = value;
+	if (value) {
+		_flags |= TM1637_FLAG_ENABLED;
+	} else {
+		_flags &= ~TM1637_FLAG_ENABLED;
+	}
 	TM1637_configure();
 }
 
 void
 TM1637_display_digit(const uint8_t addr, const uint8_t digit)
 {
+	uint8_t segments = digit < 10 ? _digit2segments[digit] : 0x00;
 
-	TM1637_display_segments(addr, digit < 10 ? _digit2segments[digit] : 0x00);
+	if (addr == TM1637_SET_ADR_01H) {
+		_digit = digit;
+		if (_flags & TM1637_FLAG_SHOWCOLON) {
+			segments |= 0x80;
+		}
+	}
+
+	TM1637_display_segments(addr, segments);
 }
 
 void
@@ -96,6 +126,7 @@ TM1637_display_segments(const uint8_t addr, const uint8_t segments)
 void
 TM1637_clear(void)
 {	
+	TM1637_show_colon(false);
 	TM1637_display_segments(TM1637_SET_ADR_00H, 0x00);
 	TM1637_display_segments(TM1637_SET_ADR_01H, 0x00);
 	TM1637_display_segments(TM1637_SET_ADR_02H, 0x00);
@@ -108,7 +139,9 @@ TM1637_configure(void)
 	uint8_t cmd;
 	cmd = TM1637_CMD_SET_DSIPLAY;
 	cmd |= _brightness;
-	cmd |= _enabled ? TM1637_SET_DISPLAY_ON : TM1637_SET_DISPLAY_OFF;
+	if (_flags & TM1637_FLAG_ENABLED) {
+		cmd |= TM1637_SET_DISPLAY_ON;
+	}
 	TM1637_cmd(cmd);
 }
 
