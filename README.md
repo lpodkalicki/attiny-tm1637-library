@@ -6,6 +6,7 @@ Modules based on TM1637 provide two signal connections (CLK and DIO) and two pow
 ## Key Features
 This lightweight library has the following features:
 * display digits
+* display colon
 * display raw segments
 * brightness control
 * display on/off
@@ -23,21 +24,23 @@ This example code demonstrates basic usage of the library:
 int
 main(void)
 {
-        uint8_t i = 0;
+	uint8_t i = 0;
 
-        /* setup */
-        TM1637_init();
-        TM1637_set_brightness(7);
+	/* setup */
+	TM1637_init();
 
-        /* loop */
-        while (1) {
-                TM1637_display_digit(TM1637_SET_ADR_00H, i % 0x10);
-                TM1637_display_digit(TM1637_SET_ADR_01H, (i + 1) % 0x10);
-                TM1637_display_digit(TM1637_SET_ADR_02H, (i + 2) % 0x10);
-                TM1637_display_digit(TM1637_SET_ADR_03H, (i + 3) % 0x10);
-                _delay_ms(300);
-                i++;
-        }
+	/* loop */
+	while (1) {
+		TM1637_display_digit(TM1637_SET_ADR_00H, i % 0x10);
+		TM1637_display_digit(TM1637_SET_ADR_01H, (i + 1) % 0x10);
+		TM1637_display_digit(TM1637_SET_ADR_02H, (i + 2) % 0x10);
+		TM1637_display_digit(TM1637_SET_ADR_03H, (i + 3) % 0x10);
+		TM1637_show_colon(true);
+		_delay_ms(200);
+		TM1637_show_colon(false);
+		_delay_ms(200);
+		i++;
+	}
 }
 ```
 
@@ -46,7 +49,7 @@ main(void)
 ```c
 /**
  * Initialize TM1637 display driver.
- * Clock pin (TM1637_CLK_PIN) and data pin (TM1637_DIO_PIN)
+ * Clock pin (TM1637_CLK_PIN) and data pin (TM1637_DIO_PIN) 
  * are defined at the top of this file.
  */
 void TM1637_init(void);
@@ -60,7 +63,7 @@ void TM1637_set_brightness(const uint8_t brightness);
 
 /**
  * Display raw segments at positions (0x00..0x03)
- *
+ * 
  *      bits:                 hex:
  *        -- 0 --               -- 01 --
  *       |       |             |        |
@@ -83,6 +86,16 @@ void TM1637_display_segments(const uint8_t addr, const uint8_t segments);
  * Display digits ('0'..'9') at positions (0x00..0x03)
  */
 void TM1637_display_digit(const uint8_t addr, const uint8_t digit);
+
+/**
+ * Display colon on/off.
+ */
+void TM1637_show_colon(bool value);
+
+/**
+ * Clear all display segments (including colon).
+ */
+void TM1637_clear(void);
 
 /**
  * Turn display on/off.
