@@ -128,6 +128,7 @@ TM1637_display_segments(const uint8_t addr, const uint8_t segments)
 void
 TM1637_clear(void)
 {	
+
 	TM1637_show_colon(false);
 	TM1637_display_segments(TM1637_SET_ADR_00H, 0x00);
 	TM1637_display_segments(TM1637_SET_ADR_01H, 0x00);
@@ -139,11 +140,13 @@ void
 TM1637_configure(void)
 {
 	uint8_t cmd;
+
 	cmd = TM1637_CMD_SET_DSIPLAY;
 	cmd |= _brightness;
 	if (_flags & TM1637_FLAG_ENABLED) {
 		cmd |= TM1637_SET_DISPLAY_ON;
 	}
+
 	TM1637_cmd(cmd);
 }
 
