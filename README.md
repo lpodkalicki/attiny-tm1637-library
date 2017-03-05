@@ -90,7 +90,7 @@ void TM1637_display_digit(const uint8_t addr, const uint8_t digit);
 /**
  * Display colon on/off.
  */
-void TM1637_show_colon(bool value);
+void TM1637_display_colon(bool value);
 
 /**
  * Clear all display segments (including colon).

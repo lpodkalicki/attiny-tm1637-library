@@ -67,38 +67,6 @@ TM1637_init(void)
 }
 
 void
-TM1637_set_brightness(const uint8_t brightness)
-{
-
-	_brightness = brightness & 0x07;
-	TM1637_configure();
-}
-
-void
-TM1637_show_colon(bool value)
-{
-
-	if (value) {
-		_flags |= TM1637_FLAG_SHOWCOLON;
-	} else {
-		_flags &= ~TM1637_FLAG_SHOWCOLON;
-	}
-	TM1637_display_digit(TM1637_SET_ADR_01H, _digit);
-}
-
-void
-TM1637_enable(bool value)
-{
-
-	if (value) {
-		_flags |= TM1637_FLAG_ENABLED;
-	} else {
-		_flags &= ~TM1637_FLAG_ENABLED;
-	}
-	TM1637_configure();
-}
-
-void
 TM1637_display_digit(const uint8_t addr, const uint8_t digit)
 {
 	uint8_t segments = digit < 10 ? _digit2segments[digit] : 0x00;
@@ -126,14 +94,46 @@ TM1637_display_segments(const uint8_t addr, const uint8_t segments)
 }
 
 void
+TM1637_display_colon(bool value)
+{
+
+	if (value) {
+		_flags |= TM1637_FLAG_SHOWCOLON;
+	} else {
+		_flags &= ~TM1637_FLAG_SHOWCOLON;
+	}
+	TM1637_display_digit(TM1637_SET_ADR_01H, _digit);
+}
+
+void
 TM1637_clear(void)
 {	
 
-	TM1637_show_colon(false);
+	TM1637_display_colon(false);
 	TM1637_display_segments(TM1637_SET_ADR_00H, 0x00);
 	TM1637_display_segments(TM1637_SET_ADR_01H, 0x00);
 	TM1637_display_segments(TM1637_SET_ADR_02H, 0x00);
 	TM1637_display_segments(TM1637_SET_ADR_03H, 0x00);
+}
+
+void
+TM1637_set_brightness(const uint8_t brightness)
+{
+
+	_brightness = brightness & 0x07;
+	TM1637_configure();
+}
+
+void
+TM1637_enable(bool value)
+{
+
+	if (value) {
+		_flags |= TM1637_FLAG_ENABLED;
+	} else {
+		_flags &= ~TM1637_FLAG_ENABLED;
+	}
+	TM1637_configure();
 }
 
 void

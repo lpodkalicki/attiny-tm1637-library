@@ -25,9 +25,9 @@ main(void)
 		TM1637_display_digit(TM1637_SET_ADR_01H, (i + 1) % 0x10);
 		TM1637_display_digit(TM1637_SET_ADR_02H, (i + 2) % 0x10);
 		TM1637_display_digit(TM1637_SET_ADR_03H, (i + 3) % 0x10);
-		TM1637_show_colon(true);
+		TM1637_display_colon(true);
 		_delay_ms(200);
-		TM1637_show_colon(false);
+		TM1637_display_colon(false);
 		_delay_ms(200);
 		i++;
 	}

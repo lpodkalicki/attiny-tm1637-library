@@ -60,11 +60,9 @@
 void TM1637_init(void);
 
 /**
- * Set display brightness.
- * Min brightness: 0
- * Max brightness: 7
+ * Display digits ('0'..'9') at positions (0x00..0x03)
  */
-void TM1637_set_brightness(const uint8_t brightness);
+void TM1637_display_digit(const uint8_t addr, const uint8_t digit);
 
 /**
  * Display raw segments at positions (0x00..0x03)
@@ -88,19 +86,21 @@ void TM1637_set_brightness(const uint8_t brightness);
 void TM1637_display_segments(const uint8_t addr, const uint8_t segments);
 
 /**
- * Display digits ('0'..'9') at positions (0x00..0x03)
- */
-void TM1637_display_digit(const uint8_t addr, const uint8_t digit);
-
-/**
  * Display colon on/off.
  */
-void TM1637_show_colon(bool value);
+void TM1637_display_colon(bool value);
 
 /**
  * Clear all display segments (including colon).
  */
 void TM1637_clear(void);
+
+/**
+ * Set display brightness.
+ * Min brightness: 0
+ * Max brightness: 7
+ */
+void TM1637_set_brightness(const uint8_t brightness);
 
 /**
  * Turn display on/off.
