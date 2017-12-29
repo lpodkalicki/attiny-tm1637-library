@@ -84,7 +84,7 @@ TM1637_init(const uint8_t dioPin, const uint8_t clkPin) {
 
     displayedSegments[0] = displayedSegments[1] = displayedSegments[2] = displayedSegments[3] = 0;
 
-    // make both pins output pins thereby implicitely set their level to high
+    // make both pins output pins thereby implicitly set their level to high
     DDRB |= (_BV(dio) | _BV(clk));
     _flags |= TM1637_FLAG_ENABLED;
     TM1637_clear();
@@ -98,7 +98,7 @@ void TM1637_display_text(const char* text) {
 
     uint8_t segment[4] = {0, 0, 0, 0};
     for (uint8_t i = 0; i < l; i++) {
-        for (uint8_t j = 0; j < 4; j++) TM1637_display_segments(j, j != 1 ? segment[j] : displayColon | segment[j]);
+        for (uint8_t j = 0; j < 4; j++) TM1637_display_segments(j, displayColon | segment[j]);
         segment[0] = segment[1];
         segment[1] = segment[2];
         segment[2] = segment[3];
@@ -185,11 +185,11 @@ void
 TM1637_display_colon(bool value) {
     if (value) {
         _flags |= TM1637_FLAG_SHOWCOLON;
-        // explicitely switch on colon to overcome filter in TM1637_display_segments
+        // explicitly switch on colon to overcome filter in TM1637_display_segments
         TM1637_display_segments(1, 0x80 | displayedSegments[1]);
     } else {
         _flags &= ~TM1637_FLAG_SHOWCOLON;
-        // explicitely switch off colon to overcome filter in TM1637_display_segments
+        // explicitly switch off colon to overcome filter in TM1637_display_segments
         TM1637_display_segments(1, ~0x80 & displayedSegments[1]);
     }
 }
@@ -289,6 +289,7 @@ TM1637_write_byte(uint8_t value) {
      * End of 8th clock cycle is start of ACK from TM1637
      */
     TM1637_LOW(clk);
+    TM1637_INPUT(dio);
     _delay_us(TM1637_DELAY_US);
 
     uint8_t ack = TM1637_READ(dio);
@@ -299,6 +300,7 @@ TM1637_write_byte(uint8_t value) {
     _delay_us(TM1637_DELAY_US);
 
     TM1637_LOW(clk);
+    TM1637_OUTPUT(dio);
 
     return ack;
 }
