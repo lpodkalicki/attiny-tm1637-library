@@ -32,27 +32,26 @@ void displayInAllSegments(uint8_t segment);
 void displayTemperature(float t, const char unit);
 
 int
-main(void)
-{
-	uint8_t j = 0;
+main(void) {
+    uint8_t j = 0;
 
-	/* setup */
-	TM1637_init(PB0, PB1);
+    /* setup */
+    TM1637_init(PB0, PB1);
 
-	/* loop */
+    /* loop */
     while (1) {
         // This is ATtiny13 "Running Digits" example using attiny-tm1637-library,
-        for (uint8_t i=0; i<200; i++) {
-		    TM1637_display_digit(TM1637_SET_ADR_00H, i % 0x10);
-		    TM1637_display_digit(TM1637_SET_ADR_01H, (i + 1) % 0x10);
-		    TM1637_display_digit(TM1637_SET_ADR_02H, (i + 2) % 0x10);
-		    TM1637_display_digit(TM1637_SET_ADR_03H, (i + 3) % 0x10);
-		    TM1637_display_colon(true);
-		    _delay_ms(200);
-		    TM1637_display_colon(false);
-		    _delay_ms(200);
-		}
-		TM1637_clear();
+        for (uint8_t i = 0; i < 200; i++) {
+            TM1637_display_digit(TM1637_SET_ADR_00H, i % 0x10);
+            TM1637_display_digit(TM1637_SET_ADR_01H, (i + 1) % 0x10);
+            TM1637_display_digit(TM1637_SET_ADR_02H, (i + 2) % 0x10);
+            TM1637_display_digit(TM1637_SET_ADR_03H, (i + 3) % 0x10);
+            TM1637_display_colon(true);
+            _delay_ms(200);
+            TM1637_display_colon(false);
+            _delay_ms(200);
+        }
+        TM1637_clear();
         displayInAllSegments(0x1);
         _delay_ms(200);
         displayInAllSegments(0x40);
@@ -115,21 +114,21 @@ main(void)
         _delay_ms(3000);
     }
 }
-        
+
 void displayInAllSegments(uint8_t segment) {
     TM1637_display_segments(0, segment);
     TM1637_display_segments(1, segment);
     TM1637_display_segments(2, segment);
     TM1637_display_segments(3, segment);
 }
-        
+
 void displayTemperature(float t, const char unit) {
     // range -9.9 degrees Celsius up to 99.9 degress Celsius or Fahrenheit
     if (t >= -9.9 && t <= 99.9) {
         TM1637_display_colon(1);
-        
+
         uint8_t pos = 0;
-        
+
         // position 0 (outer left)
         if (t < 0) {
             TM1637_display_segments(pos++, 0x40);
