@@ -19,7 +19,9 @@
  *
  */
 
+#ifndef F_CPU
 #define F_CPU 1000000UL
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,4 +1,4 @@
-/* Copyright (c) 2017-2018, Łukasz Marcin Podkalicki <lpodkalicki@gmail.com>
+/* Copyright (c) 2017-2018, ?ukasz Marcin Podkalicki <lpodkalicki@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  */
 
 /**
- * 
+ *
  * This is ATtiny13/25/45/85 library for 4-Digit LED Display based on TM1637 chip.
  *
  * Features:
@@ -86,23 +86,22 @@ TM1637_init(const uint8_t dioPin, const uint8_t clkPin) {
 
     // make both pins output pins thereby implicitly set their level to high
     DDRB |= (_BV(dio) | _BV(clk));
+	PORTB |= (_BV(dio) | _BV(clk));
     _flags |= TM1637_FLAG_ENABLED;
-    TM1637_clear();
+
+	TM1637_clear();
+	TM1637_configure();
 }
 
 void TM1637_display_text(const char* text) {
-    uint8_t l = 0;
-    while (text[l++] != '\0');
-
-    uint8_t displayColon = _flags & TM1637_FLAG_SHOWCOLON ? 0x80 : 0x00;
-
     uint8_t segment[4] = {0, 0, 0, 0};
-    for (uint8_t i = 0; i < l; i++) {
-        for (uint8_t j = 0; j < 4; j++) TM1637_display_segments(j, displayColon | segment[j]);
+	uint8_t i = 0;
+	while(text[i] != '\0') {
         segment[0] = segment[1];
         segment[1] = segment[2];
         segment[2] = segment[3];
-        segment[3] = convertChar(text[i]);
+        segment[3] = convertChar(text[i++]);
+		for (uint8_t j = 0; j < 4; j++) TM1637_display_segments(j, segment[j]);
         _delay_ms(100);
     }
 }
@@ -171,14 +170,13 @@ TM1637_display_digit(const uint8_t addr, const uint8_t digit) {
 void
 TM1637_display_segments(const uint8_t addr, const uint8_t segments) {
     if (displayedSegments[addr] != segments) {
-        displayedSegments[addr] = segments;
+        displayedSegments[addr] = (_flags & TM1637_FLAG_SHOWCOLON) ? (0x80 | segments) : segments;
         TM1637_cmd(TM1637_CMD_SET_DATA | TM1637_SET_DATA_F_ADDR);
         TM1637_start();
         TM1637_write_byte(TM1637_CMD_SET_ADDR | addr);
-        TM1637_write_byte(_flags & TM1637_FLAG_SHOWCOLON ? 0x80 | segments : segments);
+        TM1637_write_byte(displayedSegments[addr]);
         TM1637_stop();
-    }
-    TM1637_configure();
+	}
 }
 
 void
