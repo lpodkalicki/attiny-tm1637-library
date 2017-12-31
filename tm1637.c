@@ -90,6 +90,7 @@ TM1637_init(const uint8_t dioPin, const uint8_t clkPin) {
     _flags |= TM1637_FLAG_ENABLED;
 
 	TM1637_clear();
+	TM1637_display_on();
 	TM1637_configure();
 }
 
@@ -188,7 +189,7 @@ TM1637_display_colon(bool value) {
     } else {
         _flags &= ~TM1637_FLAG_SHOWCOLON;
         // explicitly switch off colon to overcome filter in TM1637_display_segments
-        TM1637_display_segments(1, ~0x80 & displayedSegments[1]);
+        TM1637_display_segments(1, (~0x80) & displayedSegments[1]);
     }
 }
 
