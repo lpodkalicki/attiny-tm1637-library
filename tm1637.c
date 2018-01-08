@@ -125,9 +125,9 @@ static uint8_t convertChar(char c) {
     } else if ('D' == c) {
         return _digit2segments[0];
     } else if ('E' == c) {
-        return val | 0x79;
+        return 0x79;
     } else if ('F' == c) {
-        return val | 0x71;
+        return 0x71;
     } else if ('G' == c) {
         return _digit2segments[6];
     } else if ('H' == c) {
@@ -138,6 +138,8 @@ static uint8_t convertChar(char c) {
         return 0x0F;
     } else if ('L' == c) {
         return 0x38;
+	} else if ('N' == c) {
+		return 0x37;
     } else if ('O' == c) {
         return _digit2segments[0];
     } else if ('P' == c) {
@@ -145,17 +147,27 @@ static uint8_t convertChar(char c) {
     } else if ('R' == c) {
         return _digit2segments[0];
     } else if ('S' == c) {
-        return 0x6C;
+        return 0x6D;
     } else if ('U' == c) {
         return 0x3D;
+	} else if ('c' == c) {
+		return 0x58;
     } else if ('d' == c) {
         return 0x5E;
+	} else if ('e' == c) {
+		return 0x79;
     } else if ('h' == c) {
         return 0x74;
+	} else if ('l' == c) {
+	    return 0x38;
+	} else if ('n' == c) {
+		return 0x54;
     } else if ('o' == c) {
         return 0x5C;
     } else if ('r' == c) {
         return 0x50;
+	} else if ('t' == c) {
+	    return 0x78;
     } else if ('u' == c) {
         return 0x94;
     }
