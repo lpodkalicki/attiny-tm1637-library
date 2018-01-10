@@ -86,23 +86,23 @@ TM1637_init(const uint8_t dioPin, const uint8_t clkPin) {
 
     // make both pins output pins thereby implicitly set their level to high
     DDRB |= (_BV(dio) | _BV(clk));
-	PORTB |= (_BV(dio) | _BV(clk));
+    PORTB |= (_BV(dio) | _BV(clk));
     _flags |= TM1637_FLAG_ENABLED;
 
-	TM1637_clear();
-	TM1637_display_on();
-	TM1637_configure();
+    TM1637_clear();
+    TM1637_display_on();
+    TM1637_configure();
 }
 
 void TM1637_display_text(const char* text) {
     uint8_t segment[4] = {0, 0, 0, 0};
-	uint8_t i = 0;
-	while(text[i] != '\0') {
+    uint8_t i = 0;
+    while(text[i] != '\0') {
         segment[0] = segment[1];
         segment[1] = segment[2];
         segment[2] = segment[3];
         segment[3] = convertChar(text[i++]);
-		for (uint8_t j = 0; j < 4; j++) TM1637_display_segments(j, segment[j]);
+        for (uint8_t j = 0; j < 4; j++) TM1637_display_segments(j, segment[j]);
         _delay_ms(100);
     }
 }
@@ -138,8 +138,8 @@ static uint8_t convertChar(char c) {
         return 0x0F;
     } else if ('L' == c) {
         return 0x38;
-	} else if ('N' == c) {
-		return 0x37;
+    } else if ('N' == c) {
+        return 0x37;
     } else if ('O' == c) {
         return _digit2segments[0];
     } else if ('P' == c) {
@@ -150,24 +150,24 @@ static uint8_t convertChar(char c) {
         return 0x6D;
     } else if ('U' == c) {
         return 0x3D;
-	} else if ('c' == c) {
-		return 0x58;
+    } else if ('c' == c) {
+        return 0x58;
     } else if ('d' == c) {
         return 0x5E;
-	} else if ('e' == c) {
-		return 0x79;
+    } else if ('e' == c) {
+        return 0x79;
     } else if ('h' == c) {
         return 0x74;
-	} else if ('l' == c) {
-	    return 0x38;
-	} else if ('n' == c) {
-		return 0x54;
+    } else if ('l' == c) {
+        return 0x38;
+    } else if ('n' == c) {
+        return 0x54;
     } else if ('o' == c) {
         return 0x5C;
     } else if ('r' == c) {
         return 0x50;
-	} else if ('t' == c) {
-	    return 0x78;
+    } else if ('t' == c) {
+        return 0x78;
     } else if ('u' == c) {
         return 0x94;
     }
@@ -189,7 +189,7 @@ TM1637_display_segments(const uint8_t addr, const uint8_t segments) {
         TM1637_write_byte(TM1637_CMD_SET_ADDR | addr);
         TM1637_write_byte(displayedSegments[addr]);
         TM1637_stop();
-	}
+    }
 }
 
 void
