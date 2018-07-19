@@ -17,6 +17,7 @@
  */
 
 #include <avr/io.h>
+#include <avr/pgmspace.h>
 #include <util/delay.h>
 #include "tm1637.h"
 
@@ -34,7 +35,9 @@ static void TM1637_start(void);
 static void TM1637_stop(void);
 static uint8_t TM1637_write_byte(uint8_t value);
 
-static const uint8_t _digit2segments[] =
+static uint8_t _config = TM1637_SET_DISPLAY_ON | TM1637_BRIGHTNESS_MAX;
+static uint8_t _segments = 0xff;
+PROGMEM const uint8_t _digit2segments[] =
 {
 	0x3F, // 0
 	0x06, // 1
@@ -47,9 +50,6 @@ static const uint8_t _digit2segments[] =
 	0x7F, // 8
 	0x6F  // 9
 };
-
-static uint8_t _config = TM1637_SET_DISPLAY_ON | TM1637_BRIGHTNESS_MAX;
-static uint8_t _segments = 0xff;
 
 void
 TM1637_init(const uint8_t enable, const uint8_t brightness)
@@ -89,7 +89,7 @@ TM1637_display_segments(const uint8_t position, const uint8_t segments)
 void
 TM1637_display_digit(const uint8_t position, const uint8_t digit)
 {
-	uint8_t segments = digit < 10 ? _digit2segments[digit] : 0x00;
+	uint8_t segments = (digit < 10 ? pgm_read_byte_near((uint8_t *)&_digit2segments + digit) : 0x00);
 
 	if (position == 0x01) {
 		segments = segments | (_segments & 0x80);
