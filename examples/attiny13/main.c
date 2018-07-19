@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017, Łukasz Marcin Podkalicki <lpodkalicki@gmail.com>
+ * Copyright (c) 2017-2018, Łukasz Marcin Podkalicki <lpodkalicki@gmail.com>
  *
  * This is ATtiny13 "Running Digits" example using attiny-tm1637-library,
  * https://github.com/lpodkalicki/attiny-tm1637-library .
@@ -14,22 +14,20 @@
 int
 main(void)
 {
-	uint8_t i = 0;
+	uint8_t n, k = 0;
 
 	/* setup */
-	TM1637_init();
+	TM1637_init(1/*enable*/, 5/*brightness*/);
 
 	/* loop */
 	while (1) {
-		TM1637_display_digit(TM1637_SET_ADR_00H, i % 0x10);
-		TM1637_display_digit(TM1637_SET_ADR_01H, (i + 1) % 0x10);
-		TM1637_display_digit(TM1637_SET_ADR_02H, (i + 2) % 0x10);
-		TM1637_display_digit(TM1637_SET_ADR_03H, (i + 3) % 0x10);
-		TM1637_display_colon(true);
+		for (n = 0; n < TM1637_POSITION_MAX; ++n) {
+			TM1637_display_digit(n, (k + n) % 0x10);
+		}
+		TM1637_display_colon(1);
 		_delay_ms(200);
-		TM1637_display_colon(false);
+		TM1637_display_colon(0);
 		_delay_ms(200);
-		i++;
+		k++;
 	}
 }
-
