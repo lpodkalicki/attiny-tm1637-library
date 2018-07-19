@@ -1,13 +1,15 @@
 # TM1637 Library
 This is tinyAVR (ATtiny13, ATtiny25, ATtiny45, ATtiny85) library for 7-segment display modules based on TM1637 chip. The TM1637 chip also has keyboard input capability, but it's not implemented in this library.
 
+![alt text](docs/TM1637.jpg "TM1637 Controller Module")
+
 Modules based on TM1637 provide two signal connections (CLK and DIO) and two power connections (VCC and GND). Signal pins can be connected to any pair of digital pins of the AVR chip. Signal pins configuration is defined at the top of library header file, where it can be modifed.
 
 ## Key Features
 This lightweight library has the following features:
+* display raw segments
 * display digits
 * display colon
-* display raw segments
 * brightness control
 * display on/off
 * software I2C
